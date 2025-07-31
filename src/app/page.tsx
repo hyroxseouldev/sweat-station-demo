@@ -30,7 +30,7 @@ export default function Home() {
         <SignedIn>
           <div className="bg-green-50 border border-green-200 rounded-lg p-8 mb-8">
             <h2 className="text-2xl font-semibold text-green-800 mb-4">
-              🎉 Welcome! You're successfully signed in
+              🎉 Welcome! You&apos;re successfully signed in
             </h2>
             <p className="text-green-700 mb-6">
               Clerk authentication is working perfectly. You can now access
