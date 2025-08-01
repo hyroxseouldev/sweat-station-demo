@@ -265,7 +265,7 @@ const HeroSection = () => (
               <Button
                 variant="default"
                 className="cursor-pointer text-lg sm:text-xl font-bold transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4"
-                size="lg"
+                size="3xl"
               >
                 회원 관리 시작하기
                 <motion.div
