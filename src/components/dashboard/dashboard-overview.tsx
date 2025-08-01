@@ -74,7 +74,11 @@ async function StatsCards() {
   );
 }
 
-export function DashboardOverview() {
+interface DashboardOverviewProps {
+  centerId?: string;
+}
+
+export function DashboardOverview({ centerId }: DashboardOverviewProps) {
   return (
     <Suspense
       fallback={

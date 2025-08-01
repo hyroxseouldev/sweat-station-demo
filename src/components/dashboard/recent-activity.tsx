@@ -52,7 +52,11 @@ async function RecentActivityContent() {
   );
 }
 
-export function RecentActivity() {
+interface RecentActivityProps {
+  centerId?: string;
+}
+
+export function RecentActivity({ centerId }: RecentActivityProps) {
   return (
     <Card>
       <CardHeader>

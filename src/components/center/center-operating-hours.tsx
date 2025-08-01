@@ -30,7 +30,11 @@ const DAYS = [
   { key: 'sunday', label: '일요일' },
 ];
 
-export function CenterOperatingHours() {
+interface CenterOperatingHoursProps {
+  centerId: string;
+}
+
+export function CenterOperatingHours({ centerId }: CenterOperatingHoursProps) {
   const [center, setCenter] = useState<Center | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,11 +42,11 @@ export function CenterOperatingHours() {
 
   useEffect(() => {
     loadCenterData();
-  }, []);
+  }, [centerId]);
 
   const loadCenterData = async () => {
     try {
-      const response = await mockApiService.getCenter();
+      const response = await mockApiService.getCenter(centerId);
       if (response.success && response.data) {
         setCenter(response.data);
         
@@ -101,7 +105,7 @@ export function CenterOperatingHours() {
 
       const response = await mockApiService.updateCenter({
         operatingHours: formattedHours,
-      });
+      }, centerId);
       
       if (response.success) {
         setCenter(response.data);

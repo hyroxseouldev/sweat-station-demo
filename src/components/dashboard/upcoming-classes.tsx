@@ -98,7 +98,11 @@ async function UpcomingClassesContent() {
   );
 }
 
-export function UpcomingClasses() {
+interface UpcomingClassesProps {
+  centerId?: string;
+}
+
+export function UpcomingClasses({ centerId }: UpcomingClassesProps) {
   return (
     <Card>
       <CardHeader>

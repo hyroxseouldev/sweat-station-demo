@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CenterBreadcrumb } from '@/components/dashboard/center-breadcrumb';
 import { CenterInfoForm } from '@/components/center/center-info-form';
 import { CenterOperatingHours } from '@/components/center/center-operating-hours';
 import { CenterImages } from '@/components/center/center-images';
@@ -47,9 +48,19 @@ function OperatingHoursLoading() {
   );
 }
 
-export default function CenterPage() {
+interface CenterPageProps {
+  params: Promise<{
+    centerId: string;
+  }>;
+}
+
+export default async function CenterPage({ params }: CenterPageProps) {
+  const { centerId } = await params;
   return (
     <div className="space-y-8">
+      {/* Breadcrumb */}
+      <CenterBreadcrumb centerId={centerId} currentPage="센터 관리" />
+
       {/* Page header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">센터 관리</h1>
@@ -63,22 +74,22 @@ export default function CenterPage() {
         {/* Center basic info */}
         <div className="space-y-8">
           <Suspense fallback={<CenterInfoLoading />}>
-            <CenterInfoForm />
+            <CenterInfoForm centerId={centerId} />
           </Suspense>
 
           <Suspense fallback={<OperatingHoursLoading />}>
-            <CenterOperatingHours />
+            <CenterOperatingHours centerId={centerId} />
           </Suspense>
         </div>
 
         {/* Images and subscription */}
         <div className="space-y-8">
           <Suspense fallback={<CenterInfoLoading />}>
-            <CenterImages />
+            <CenterImages centerId={centerId} />
           </Suspense>
 
           <Suspense fallback={<CenterInfoLoading />}>
-            <CenterSubscription />
+            <CenterSubscription centerId={centerId} />
           </Suspense>
         </div>
       </div>

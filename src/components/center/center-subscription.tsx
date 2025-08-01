@@ -9,14 +9,18 @@ import { CreditCard, Users, Calendar, TrendingUp, AlertTriangle } from 'lucide-r
 import { mockApiService } from '@/services/mock-data';
 import type { Subscription, DashboardStats } from '@/types/database';
 
-export function CenterSubscription() {
+interface CenterSubscriptionProps {
+  centerId: string;
+}
+
+export function CenterSubscription({ centerId }: CenterSubscriptionProps) {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadSubscriptionData();
-  }, []);
+  }, [centerId]);
 
   const loadSubscriptionData = async () => {
     try {

@@ -10,7 +10,11 @@ import { ImageIcon, Upload, X } from 'lucide-react';
 import { mockApiService } from '@/services/mock-data';
 import type { Center } from '@/types/database';
 
-export function CenterImages() {
+interface CenterImagesProps {
+  centerId: string;
+}
+
+export function CenterImages({ centerId }: CenterImagesProps) {
   const [center, setCenter] = useState<Center | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -19,11 +23,11 @@ export function CenterImages() {
 
   useEffect(() => {
     loadCenterData();
-  }, []);
+  }, [centerId]);
 
   const loadCenterData = async () => {
     try {
-      const response = await mockApiService.getCenter();
+      const response = await mockApiService.getCenter(centerId);
       if (response.success && response.data) {
         setCenter(response.data);
         setLogoUrl(response.data.logoUrl || '');
@@ -45,7 +49,7 @@ export function CenterImages() {
       const response = await mockApiService.updateCenter({
         logoUrl: logoUrl || undefined,
         coverImageUrl: coverImageUrl || undefined,
-      });
+      }, centerId);
       
       if (response.success) {
         setCenter(response.data);

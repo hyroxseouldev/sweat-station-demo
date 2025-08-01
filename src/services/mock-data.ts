@@ -16,31 +16,72 @@ import type {
 // Mock current center - in real app this would come from auth context
 const MOCK_CENTER_ID = 'center-1';
 
-// Mock data
-const mockCenter: Center = {
-  id: MOCK_CENTER_ID,
-  clerkOrgId: 'org_mock_12345',
-  name: '강남 크로스핏',
-  businessRegistrationNumber: '123-45-67890',
-  address: '서울시 강남구 테헤란로 123',
-  phone: '02-1234-5678',
-  email: 'contact@gangnamcrossfit.com',
-  websiteUrl: 'https://gangnamcrossfit.com',
-  description: '강남 최고의 크로스핏 박스입니다. 전문 트레이너와 함께 건강한 운동을 시작하세요!',
-  vatNumber: 'VAT-123456789',
-  operatingHours: {
-    monday: { open: '06:00', close: '22:00' },
-    tuesday: { open: '06:00', close: '22:00' },
-    wednesday: { open: '06:00', close: '22:00' },
-    thursday: { open: '06:00', close: '22:00' },
-    friday: { open: '06:00', close: '22:00' },
-    saturday: { open: '08:00', close: '20:00' },
-    sunday: { open: '08:00', close: '18:00' },
+// Mock data - Multiple centers
+const mockCenters: Center[] = [
+  {
+    id: MOCK_CENTER_ID,
+    clerkOrgId: 'org_mock_12345',
+    name: '강남 크로스핏',
+    businessRegistrationNumber: '123-45-67890',
+    address: '서울시 강남구 테헤란로 123',
+    phone: '02-1234-5678',
+    email: 'contact@gangnamcrossfit.com',
+    websiteUrl: 'https://gangnamcrossfit.com',
+    description: '강남 최고의 크로스핏 박스입니다. 전문 트레이너와 함께 건강한 운동을 시작하세요!',
+    vatNumber: 'VAT-123456789',
+    operatingHours: {
+      monday: { open: '06:00', close: '22:00' },
+      tuesday: { open: '06:00', close: '22:00' },
+      wednesday: { open: '06:00', close: '22:00' },
+      thursday: { open: '06:00', close: '22:00' },
+      friday: { open: '06:00', close: '22:00' },
+      saturday: { open: '08:00', close: '20:00' },
+      sunday: { open: '08:00', close: '18:00' },
+    },
+    status: 'active',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date(),
   },
-  status: 'active',
-  createdAt: new Date('2024-01-01'),
-  updatedAt: new Date(),
-};
+  {
+    id: 'center-2',
+    clerkOrgId: 'org_mock_12346',
+    name: '홍대 요가 스튜디오',
+    businessRegistrationNumber: '234-56-78901',
+    address: '서울시 마포구 홍익로 45',
+    phone: '02-2345-6789',
+    email: 'hello@hongdaeyoga.com',
+    description: '평온한 마음과 건강한 몸을 위한 요가 스튜디오입니다.',
+    vatNumber: 'VAT-234567890',
+    operatingHours: {
+      monday: { open: '07:00', close: '21:00' },
+      tuesday: { open: '07:00', close: '21:00' },
+      wednesday: { open: '07:00', close: '21:00' },
+      thursday: { open: '07:00', close: '21:00' },
+      friday: { open: '07:00', close: '21:00' },
+      saturday: { open: '09:00', close: '19:00' },
+      sunday: null,
+    },
+    status: 'active',
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'center-3',
+    clerkOrgId: 'org_mock_12347',
+    name: '분당 헬스클럽',
+    businessRegistrationNumber: '345-67-89012',
+    address: '경기도 성남시 분당구 정자일로 78',
+    phone: '031-3456-7890',
+    email: 'info@bundangfitness.com',
+    description: '최신 장비와 전문 트레이너가 함께하는 종합 헬스클럽입니다.',
+    status: 'trial',
+    createdAt: new Date('2024-02-01'),
+    updatedAt: new Date(),
+  },
+];
+
+// Legacy support - get first center as default
+const mockCenter = mockCenters[0];
 
 const mockUsers: User[] = [
   {
@@ -278,20 +319,88 @@ const mockPayments: Payment[] = [
 
 // Mock API Services - these will be easily replaceable with real API calls
 export const mockApiService = {
-  // Center
-  async getCenter(): Promise<ApiResponse<Center>> {
-    await new Promise(resolve => setTimeout(resolve, 300)); // Simulate API delay
+  // Centers
+  async getCenters(): Promise<ApiResponse<Center[]>> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return {
       success: true,
-      data: mockCenter,
+      data: mockCenters,
     };
   },
 
-  async updateCenter(updates: Partial<Center>): Promise<ApiResponse<Center>> {
-    await new Promise(resolve => setTimeout(resolve, 500));
+  async getCenter(centerId?: string): Promise<ApiResponse<Center>> {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    const center = centerId 
+      ? mockCenters.find(c => c.id === centerId)
+      : mockCenter;
+    
+    if (!center) {
+      return {
+        success: false,
+        message: 'Center not found',
+        data: {} as Center,
+      };
+    }
+
     return {
       success: true,
-      data: { ...mockCenter, ...updates, updatedAt: new Date() },
+      data: center,
+    };
+  },
+
+  async createCenter(centerData: Partial<Center>): Promise<ApiResponse<Center>> {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const newCenter: Center = {
+      id: `center-${Date.now()}`,
+      clerkOrgId: centerData.clerkOrgId || `org_${Date.now()}`,
+      name: centerData.name || '',
+      businessRegistrationNumber: centerData.businessRegistrationNumber,
+      address: centerData.address,
+      phone: centerData.phone,
+      email: centerData.email,
+      websiteUrl: centerData.websiteUrl,
+      logoUrl: centerData.logoUrl,
+      coverImageUrl: centerData.coverImageUrl,
+      operatingHours: centerData.operatingHours,
+      description: centerData.description,
+      vatNumber: centerData.vatNumber,
+      bankAccount: centerData.bankAccount,
+      status: centerData.status || 'trial',
+      stripeCustomerId: centerData.stripeCustomerId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockCenters.push(newCenter);
+    return {
+      success: true,
+      data: newCenter,
+    };
+  },
+
+  async updateCenter(updates: Partial<Center>, centerId?: string): Promise<ApiResponse<Center>> {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const targetCenterId = centerId || MOCK_CENTER_ID;
+    const centerIndex = mockCenters.findIndex(c => c.id === targetCenterId);
+    
+    if (centerIndex === -1) {
+      return {
+        success: false,
+        message: 'Center not found',
+        data: {} as Center,
+      };
+    }
+
+    const updatedCenter = { 
+      ...mockCenters[centerIndex], 
+      ...updates, 
+      updatedAt: new Date() 
+    };
+    mockCenters[centerIndex] = updatedCenter;
+
+    return {
+      success: true,
+      data: updatedCenter,
     };
   },
 

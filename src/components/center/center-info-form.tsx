@@ -11,7 +11,11 @@ import { Building2, Mail, Phone, Globe, MapPin, CreditCard, FileText } from 'luc
 import { mockApiService } from '@/services/mock-data';
 import type { Center } from '@/types/database';
 
-export function CenterInfoForm() {
+interface CenterInfoFormProps {
+  centerId: string;
+}
+
+export function CenterInfoForm({ centerId }: CenterInfoFormProps) {
   const [center, setCenter] = useState<Center | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -29,11 +33,11 @@ export function CenterInfoForm() {
 
   useEffect(() => {
     loadCenterData();
-  }, []);
+  }, [centerId]);
 
   const loadCenterData = async () => {
     try {
-      const response = await mockApiService.getCenter();
+      const response = await mockApiService.getCenter(centerId);
       if (response.success && response.data) {
         setCenter(response.data);
         setFormData({
@@ -65,7 +69,7 @@ export function CenterInfoForm() {
 
     setIsSaving(true);
     try {
-      const response = await mockApiService.updateCenter(formData);
+      const response = await mockApiService.updateCenter(formData, centerId);
       if (response.success) {
         setCenter(response.data);
         // Show success message (in real app, use toast)
