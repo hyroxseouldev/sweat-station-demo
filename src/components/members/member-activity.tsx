@@ -37,14 +37,14 @@ async function MemberActivityContent({ memberId }: Props) {
       id: 'booking-2',
       className: 'HIIT Training',
       date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-      status: 'attended' as const,
+      status: 'no_show' as const,
       instructor: '박트레이너',
     },
     {
       id: 'booking-3',
       className: 'CrossFit WOD',
       date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-      status: 'no_show' as const,
+      status: 'cancelled' as const,
       instructor: '박트레이너',
     },
   ];

@@ -93,7 +93,7 @@ export interface Class {
   maxCapacity: number;
   durationMinutes: number;
   pricePerSession?: string;
-  recurringSchedule?: any;
+  recurringSchedule?: Record<string, unknown>;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
