@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   Building2,
   Users,
@@ -13,51 +13,75 @@ import {
   Home,
   Menu,
   X,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
-const navigation = [
-  {
-    name: '대시보드',
-    href: '/dashboard',
-    icon: Home,
-  },
-  {
-    name: '센터 관리',
-    href: '/dashboard/center',
-    icon: Building2,
-  },
-  {
-    name: '회원 관리',
-    href: '/dashboard/members',
-    icon: Users,
-  },
-  {
-    name: '멤버십 관리',
-    href: '/dashboard/memberships',
-    icon: CreditCard,
-  },
-  {
-    name: '수업 관리',
-    href: '/dashboard/classes',
-    icon: Calendar,
-  },
-  {
-    name: '분석',
-    href: '/dashboard/analytics',
-    icon: BarChart3,
-  },
-  {
-    name: '설정',
-    href: '/dashboard/settings',
-    icon: Settings,
-  },
-];
+const getNavigation = (centerId?: string) => {
+  if (centerId) {
+    // Center-specific navigation
+    return [
+      {
+        name: "센터 대시보드",
+        href: `/dashboard/${centerId}`,
+        icon: Home,
+      },
+      {
+        name: "센터 관리",
+        href: `/dashboard/${centerId}/center`,
+        icon: Building2,
+      },
+      {
+        name: "회원 관리",
+        href: `/dashboard/${centerId}/members`,
+        icon: Users,
+      },
+      {
+        name: "멤버십 관리",
+        href: `/dashboard/${centerId}/memberships`,
+        icon: CreditCard,
+      },
+      {
+        name: "수업 관리",
+        href: `/dashboard/${centerId}/classes`,
+        icon: Calendar,
+      },
+      {
+        name: "분석",
+        href: `/dashboard/${centerId}/analytics`,
+        icon: BarChart3,
+      },
+      {
+        name: "설정",
+        href: `/dashboard/${centerId}/settings`,
+        icon: Settings,
+      },
+    ];
+  } else {
+    // General navigation (centers list)
+    return [
+      {
+        name: "센터 목록",
+        href: "/dashboard",
+        icon: Home,
+      },
+      {
+        name: "회원 관리",
+        href: "/dashboard/members",
+        icon: Users,
+      },
+    ];
+  }
+};
 
-export function Sidebar() {
+interface SidebarProps {
+  centerId?: string;
+}
+
+export function Sidebar({ centerId }: SidebarProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigation = getNavigation(centerId);
 
   return (
     <>
@@ -87,21 +111,23 @@ export function Sidebar() {
       {/* Sidebar */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0',
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Logo/Brand */}
           <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-white" />
+            <Link href="/dashboard">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-white" />
+                </div>
+                <div className="font-bold text-lg text-gray-900">
+                  Sweat Station
+                </div>
               </div>
-              <div className="font-bold text-lg text-gray-900">
-                Sweat Station
-              </div>
-            </div>
+            </Link>
           </div>
 
           {/* Navigation */}
@@ -114,16 +140,16 @@ export function Sidebar() {
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? 'bg-blue-100 text-blue-700 border-r-2 border-blue-700'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   )}
                 >
                   <item.icon
                     className={cn(
-                      'w-5 h-5',
-                      isActive ? 'text-blue-700' : 'text-gray-500'
+                      "w-5 h-5",
+                      isActive ? "text-blue-700" : "text-gray-500"
                     )}
                   />
                   <span>{item.name}</span>

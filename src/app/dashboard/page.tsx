@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { CentersList } from "@/components/centers/centers-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import MainHeader from "@/components/header";
 
 // Loading components
 function CentersLoading() {
@@ -28,19 +29,23 @@ function CentersLoading() {
 
 export default function CentersPage() {
   return (
-    <div className="space-y-8">
-      {/* Page header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">센터 관리</h1>
-        <p className="text-gray-600 mt-2">
-          등록된 센터를 관리하고 새로운 센터를 추가하세요
-        </p>
-      </div>
+    <>
+      <MainHeader />
+      <div className="space-y-8 container mx-auto p-6">
+        {/* Page header */}
 
-      {/* Centers list */}
-      <Suspense fallback={<CentersLoading />}>
-        <CentersList />
-      </Suspense>
-    </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">센터 관리</h1>
+          <p className="text-gray-600 mt-2">
+            등록된 센터를 관리하고 새로운 센터를 추가하세요
+          </p>
+        </div>
+
+        {/* Centers list */}
+        <Suspense fallback={<CentersLoading />}>
+          <CentersList />
+        </Suspense>
+      </div>
+    </>
   );
 }
