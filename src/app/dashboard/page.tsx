@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { CentersList } from "@/components/centers/centers-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import MainHeader from "@/components/header";
 
 // Loading components
 function CentersLoading() {
@@ -30,7 +29,6 @@ function CentersLoading() {
 export default function CentersPage() {
   return (
     <>
-      <MainHeader />
       <div className="space-y-8 container mx-auto p-6">
         {/* Page header */}
 
